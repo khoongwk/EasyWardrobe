@@ -255,13 +255,13 @@ def send_image(filename):
 #             connection.close()
 
 @app.route("/deleteItem", methods=["GET"])
-def delete_outfits():
+def delete_item():
     try:
         toBeDeleted = request.get_json()
         connection = connect_db()
         cursor = connection.cursor()
         delete_statement = "DELETE FROM clothings WHERE clothing_type=%s AND relative_path=%s;"
-        item = (imageType, relative_path)
+        item = (toBeDeleted["image_type"], toBeDeleted["relative_path"])
         cursor.execute(delete_statement, item)
         
         return "Successfully Deleted Record"
@@ -276,9 +276,7 @@ def delete_outfits():
             # print("PostgreSQL connection is closed")
 
 @app.route("/addOutfit", methods=["GET"])
-def add_outfit():
-    json.request[]
-    
+def add_outfit(): 
     try:
         connection = connect_db()
         cursor = connection.cursor()
