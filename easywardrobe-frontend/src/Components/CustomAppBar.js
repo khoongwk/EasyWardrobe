@@ -33,6 +33,10 @@ function CustomAppBar(props) {
     props.history.push("/outfits");
   }
 
+  const handleNavLoginPage = () => {
+    props.history.push("/login");
+  }
+
   return (
     <Fragment>
       <AppBar position="static">
@@ -44,6 +48,7 @@ function CustomAppBar(props) {
             <Button onClick={handleNavHome} color="inherit">Create An Outfit</Button>
             <Button onClick={handleNavOutfitsPage} color="inherit">My Outfits</Button>            
             <Button onClick={handleNavWardrobePage} color="inherit">My Wardrobe</Button>
+            <Button onClick={handleNavLoginPage} color="inherit">Sign Out</Button>
           </Typography>
         </Toolbar>
       </AppBar>
