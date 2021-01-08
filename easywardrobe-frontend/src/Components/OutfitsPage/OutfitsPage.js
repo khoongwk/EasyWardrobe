@@ -27,7 +27,6 @@ class OutfitsPage extends Component {
     this.state = {
       outfitsJSON: []
     }
-    this.savedOutfits = this.savedOutfits.bind(this)
   }
 
   componentDidMount() {
