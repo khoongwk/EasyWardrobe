@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import OutfitsList from './OutfitsList';
+import Outfit from './Outfit'
 import { Grid, withStyles, Box, Card, CardContent, Typography, CardActions } from '@material-ui/core';
 
 const styles = {
@@ -21,6 +22,29 @@ const styles = {
 
 class OutfitsPage extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      outfitsJSON: []
+    }
+    this.savedOutfits = this.savedOutfits.bind(this)
+  }
+
+  componentDidMount() {
+    fetch('/getOutfits').then(res => res.json()).then(data => this.setState({outfitsJSON: data}))
+  }
+
+  get savedOutfits() {
+    console.log(this.state.outfitsJSON);
+    if (this.state.outfitsJSON.length === 0) {
+      console.log("returning undefined.");
+      return undefined;
+    } else {
+      console.log("Returning entire JSON")
+      return this.state.outfitsJSON
+    }
+  }
+
   render() {
     return (
       <Box className={this.props.classes.bg}>
@@ -30,10 +54,15 @@ class OutfitsPage extends Component {
             <OutfitsList />
           </Typography>
         </Card>
-        <Grid container>
-          <Card>
-            <Grid item></Grid>
-          </Card>
+        <Grid className={this.props.classes.container}
+           id="introduction" justify="center" container>
+          <Grid xs={10} lg={8} spacing={2} justify="center" container>
+            {
+              this.savedOutfits
+                ? this.savedOutfits["outfits"].map(file => <Outfit outfit={file["items"]} id={file["outfit_id"]}/>)                
+                : null
+            }
+          </Grid>
         </Grid>
       </Box>
     )
