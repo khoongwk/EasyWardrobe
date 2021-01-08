@@ -120,11 +120,10 @@ class WardrobePage extends Component {
                   <Button onClick={this.fileUploadHandler}>Upload</Button>
                 </form>
               </Card>
-
               {this.state.clothesFilepaths.map(
                 filePath => {
                   console.log('..\\easywardrobe-backend' + filePath)
-                  return <ClothesCard imgsrc={'..\\easywardrobe-backend\\' + filePath}   onDeleteHandler={this.onDeleteHandler}/>
+                  return <ClothesCard imgsrc="C:\Users\khoon\OneDrive\Documents\EasyWardrobe\easywardrobe-backend\images\tops\Figure_1.png"   onDeleteHandler={this.onDeleteHandler}/>
                 } 
               )}
 
