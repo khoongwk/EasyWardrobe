@@ -30,7 +30,7 @@ app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
 # Use localhost for local database (with the default password set for your system).
 def connect_db():
     connection = psycopg2.connect(user="postgres",
-                                password="01041996",
+                                password="postgres",
                                 host="localhost",
                                 port="5432",
                                 database="easywar")

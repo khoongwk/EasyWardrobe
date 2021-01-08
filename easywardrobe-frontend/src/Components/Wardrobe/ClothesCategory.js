@@ -11,7 +11,7 @@ const ClothesCategory = ({ handleCategoryChange }) => {
         <Select
           labelId="category-label"
           id="category-select-label"
-          defaultValue={"Accessories"}
+          defaultValue={"accessories"}
           onChange={handleCategoryChange}
           displayEmpty
         >
