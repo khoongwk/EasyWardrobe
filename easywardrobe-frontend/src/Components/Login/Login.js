@@ -27,7 +27,7 @@ class Login extends React.Component {
     }
 
     onSubmitLogin = () => {
-        fetch('http://localhost:3000/login', {
+        fetch('http://localhost:5200/login', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -41,7 +41,9 @@ class Login extends React.Component {
             } else if (data === 'Error - Invalid Password') {
                 alert('Error - Invalid Password');
             } else {
-                
+                // return (
+                //     // Route to HomePage
+                // );
             }
         })
         .catch((err) => console.log(err))
@@ -69,9 +71,6 @@ class Login extends React.Component {
               <div className="">
                 <input onClick={this.onSubmitLogin}
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in" />
-              </div>
-              <div className="lh-copy mt3">
-                <p className="f6 link dim black db">Register</p>
               </div>
             </div>
           </main>

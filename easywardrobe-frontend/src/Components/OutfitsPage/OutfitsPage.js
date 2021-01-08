@@ -1,6 +1,7 @@
 // Outfits page containing all user-uploaded outfits and functions to delete them.
 
 import React, { Component } from 'react';
+import OutfitsList from './OutfitsList';
 import { Grid, withStyles, Box, Card, CardContent, Typography, CardActions } from '@material-ui/core';
 
 const styles = {
@@ -26,6 +27,7 @@ class WardrobePage extends Component {
         <Card className={this.props.classes.container}>
           <Typography>
             <h1>My saved outfits</h1>
+            <OutfitsList />
           </Typography>
         </Card>
       </Box>
