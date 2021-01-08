@@ -65,10 +65,15 @@ def login():
 
 
 def allowed_image(filename):
+
+    if filename == "":
+        print("No file name")
+        return False
+
     if not "." in filename:
+        print("Invalid file")
         return False
     
-    print(filename)
     ext = filename.rsplit(".", 1)[1]
 
     if ext.upper() in app.config["ALLOWED_IMAGE_EXTENSIONS"]:
@@ -81,10 +86,6 @@ def upload_item(imageType):
     if request.method == "POST":
         if request.files:
             image = request.files["image"]
-            
-            if image.filename == "":
-                print("No file name")
-                return "Error in uploading"
             
             if not allowed_image(image.filename):
                 print("Extension not allowed")
