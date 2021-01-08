@@ -17,6 +17,7 @@ app.config["IMAGE_TYPE_ACCESSORIES"] = "images\\accessories"
 app.config["IMAGE_TYPE_TOP"] = "\images\\top"
 app.config["IMAGE_TYPE_BOTTOM"] = "\images\\bottom"
 app.config["IMAGE_TYPE_SHOES"] = "\images\\shoes"
+app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
 
 
 # Start up of the flask backend
@@ -63,12 +64,32 @@ def login():
     #         return "Error - Invalid password"
 
 
+def allowed_image(filename):
+    if not "." in filename:
+        return False
+    
+    print(filename)
+    ext = filename.rsplit(".", 1)[1]
+
+    if ext.upper() in app.config["ALLOWED_IMAGE_EXTENSIONS"]:
+        return True
+    else:
+        return False
+
 @app.route("/uploadItem/<imageType>", methods=["POST"])
 def upload_item(imageType):
     if request.method == "POST":
         if request.files:
             image = request.files["image"]
             
+            if image.filename == "":
+                print("No file name")
+                return "Error in uploading"
+            
+            if not allowed_image(image.filename):
+                print("Extension not allowed")
+                return "Error in uploading"
+
             if imageType == "accessories":
                 path = app.config["IMAGE_TYPE_ACCESSORIES"]
             elif imageType == "top":
@@ -78,6 +99,7 @@ def upload_item(imageType):
             elif imageType == "shoes":
                 path = app.config["IMAGE_TYPE_SHOES"]
             else:
+                print("Wrong image type")
                 return "Error in uploading"
             
             image.save(os.path.join(path, image.filename))
