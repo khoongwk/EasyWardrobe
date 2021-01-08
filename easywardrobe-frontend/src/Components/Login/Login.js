@@ -1,4 +1,13 @@
 import React from 'react';
+import { Grid, withStyles, Box, Card, CardContent, Typography, CardActions } from '@material-ui/core';
+
+const styles = {
+  container: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    marginBottom: '5vh'
+  }
+};
 
 class Login extends React.Component {
     constructor(props) {
@@ -71,5 +80,5 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default withStyles(styles)(Login);
 
