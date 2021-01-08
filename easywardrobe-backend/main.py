@@ -74,7 +74,7 @@ def input_user(username, password):
 def login():
     username = request.get_json()["username"]
     password = request.get_json()["password"]
-
+    
     try:
         connection = connect_db()
         cursor = connection.cursor()
@@ -150,20 +150,139 @@ def upload_item(imageType):
                 print("Wrong image type")
                 return "Error in uploading"
             
-            print(os.path.join(path, image.filename))
+            insert_clothing(imageType, os.path.join(path, image.filename))
+
+            # print(os.path.join(path, image.filename))
             image.save(os.path.join(path, image.filename))
             return "Upload Successful"
+
+# Input user 
+def insert_clothing(imageType, relative_path):
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
+
+        postgres_insert_query = """ INSERT INTO clothings (clothing_type, relative_path) 
+                                    VALUES (%s, %s)"""
+        record_to_insert = (imageType, relative_path,)
+        cursor.execute(postgres_insert_query, record_to_insert)
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Clothing item inserted successfully into clothings table")
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            print("Error while inserting into clothings table", error)
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            # print("PostgreSQL connection is closed")
+
 
 @app.route("/sendImage/<path:filename>", methods=["GET"])
 def send_image(filename):
     try: 
         path = filename.split("/")
         return send_from_directory(path[0] + "\\" + path[1], filename=path[2])
-    except FileNotFoundError:
+    except FileNotFoundError: 
         abort(404)
+
+@app.route("/getImage/type", methods=["GET"])
+
+def get_image(type):
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
+
+        postgres_select_query = """ SELECT FROM clothings (clothing_type, relative_path) 
+                                    VALUES (%s, %s)"""
+        record_to_insert = (imageType, relative_path,)
+        cursor.execute(postgres_select_query, record_to_insert)
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Clothing item inserted successfully into clothings table")
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            print("Error while inserting into clothings table", error)
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            # print("PostgreSQL connection is closed")
+
+        {item:[relative path, path]}
+///////
+        try:
+        connection = connect_db()
+        cursor_categories = connection.cursor()
+        cursor_quotes = connection.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor)
+        categories_query = (
+            " SELECT category_id FROM category WHERE category_type = b'0';"
+        )
+        cursor_categories.execute(categories_query)
+        connection.commit()
+        categories_list = cursor_categories.fetchall()
+        final_output = {}
+        for category_id in categories_list:
+            quote_select_query = """SELECT quotes_id, quotes_author, quotes_description, category_id
+                                    FROM quotes WHERE category_id = %s;"""
+            cursor_quotes.execute(quote_select_query, category_id)
+            current_category_quotes = cursor_quotes.fetchall()
+            print(current_category_quotes)
+
+            current_category_query = (
+                "SELECT category_info FROM category WHERE category_id = %s;"
+            )
+            cursor_categories.execute(current_category_query, category_id)
+            (category_name,) = cursor_categories.fetchall()[0]
+            print(category_name)
+
+            connection.commit()
+            final_output.update({category_name: current_category_quotes})
+
+        print("Successful GET of all quotes.")
+        return json.dumps(final_output)
+
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error while getting quotes table and converting to JSON.", error)
+
+    finally:
+        # Closing database connection.
+        if connection:
+            cursor_quotes.close()
+            cursor_categories.close()
+            connection.close()
+
+@app.route("/addOutfit", methods=["GET"])
+def add_outfit():
+    json.request[]
+    
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
+
+        postgres_insert_query = """ INSERT INTO outfits (outfit_id, saved_clothings) 
+                                    VALUES (DEFAULT, %s)"""
+        record_to_insert = (relative_path,)
+        cursor.execute(postgres_insert_query, record_to_insert)
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Outfit inserted successfully into outfits table")
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            print("Error while inserting into outfits table", error)
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            # print("PostgreSQL connection is closed")
+
+@app.route("/getOutfits", methods=["GET"])
+def getOutfits
 
 if __name__ == '__main__':
     # app.run(debug=True)
-    # input_user("Rollie", "123")
+    input_user("Rollie", "123")
     # login()
     app.run(host='0.0.0.0', port=5200)
