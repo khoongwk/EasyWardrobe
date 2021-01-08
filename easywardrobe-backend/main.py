@@ -7,12 +7,28 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import JWTManager
 
+# DB connection
+import psycopg2
+from psycopg2 import Error, extras
+import csv
+import json
+import requests
+
+from flask import Flask, request
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = 'secret'
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 CORS(app)
 
+# Use localhost for local database (with the default password set for your system).
+def connect_db():
+    connection = psycopg2.connect(user="postgres",
+                                password="postgrespassword",
+                                host="localhost",
+                                port="5432",
+                                database="easywar")
+    return connection
 
 # Start up of the flask backend
 @app.route("/", methods=["GET", "POST"])
@@ -21,43 +37,76 @@ def start_up():
     return "Backend up and running"
 
 
-# Register user
-@app.route('/register', methods=['POST'])
-def register():
-    user_name = request.get_json()["username"]
-    password = bcrypt.generate_password_hash(request.get_json()["password"]).decode("utf-8")
-    created = datetime.now()
-    
-    # check if username already taken
+# Input user 
+def input_user(username, password):
+    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
 
+        postgres_insert_query = """ INSERT INTO users (username, password) 
+                                    VALUES (%s, %s)"""
+        record_to_insert = (username, hashed_password,)
+        cursor.execute(postgres_insert_query, record_to_insert)
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "User inserted successfully into users table")
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            print(error)
+            return "Error - Username already exists"
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            # print("PostgreSQL connection is closed")
 
-# Login user
+# Logs in user.
+# Checks login username and password of user in users table.
+# Returns error string if username and/or password does not match the information in the users table. 
 @app.route('/login', methods=['POST'])
 def login():
-    user_name = request.get_json()["username"]
+    username = request.get_json()["username"]
     password = request.get_json()["password"]
 
-    # Basically check if username exist, if yes check the hash password to see if match
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
+        cursor2 = connection.cursor()
 
+        postgres_query = """ SELECT * FROM users WHERE username = %s"""
+        record_to_select = (username,)
+        cursor.execute(postgres_query, record_to_select)
+        result = cursor.fetchall()
 
-    # arg_dict = {
-    #     "username": user_name.lower()
-    # }
-    # print(arg_dict)
-    # hits = esMethod.search_exact_docs(client=es, index="user", arg_dict=arg_dict)
-    # if len(hits) == 0:
-    #     return "Error - Username not found"
-    # else:
-    #     body = hits[0]["body"]
-    #     to_check_password = body["password"]
-    #     if bcrypt.check_password_hash(to_check_password, password):
-    #         access_token = create_access_token(identity={"email": body["email"], "uuid": hits[0]["uuid"]})
-    #         print(type(access_token))
-    #         dic = {"token": access_token}
-    #         return dic
-    #     else:
-    #         return "Error - Invalid password"
-    
+        if not result:
+            print("Username not found")
+            return "Error - Username not found"
+
+        queried_password = result[0][1]
+
+        if bcrypt.check_password_hash(queried_password, password):
+            print("Login successful")
+            return "Login successful"
+        else:
+            print("Invalid password")
+            return "Error - Invalid password"
+
+        connection.commit()
+        count = cursor.rowcount
+
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            raise Exception("Error while selecting record from users table.")
+            print("Failed to select record from users table.", error)
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            #print("PostgreSQL connection is closed") 
 
 if __name__ == '__main__':
+    # app.run(debug=True)
+    # input_user("Rollie", "123")
+    # login()
     app.run(host='0.0.0.0', port=5200)
