@@ -2,20 +2,31 @@ import React from 'react';
 import Card from './Card'
 
 const CardList = ({ clothes, onItemSelect }) => {
-    let pictures = [];
+    let filenames = [];
     if (clothes === 'accessories') {
-        pictures = ['https://upload.wikimedia.org/wikipedia/commons/4/41/Sunflower_from_Silesia2.jpg',
-        'https://upload.wikimedia.org/wikipedia/commons/4/41/Sunflower_from_Silesia2.jpg',
-        'https://minons.files.wordpress.com/2014/09/cropped-chiquita-dm2-minion-dave-bananas.jpg',
-        'https://upload.wikimedia.org/wikipedia/commons/4/41/Sunflower_from_Silesia2.jpg',
-        'https://upload.wikimedia.org/wikipedia/commons/4/41/Sunflower_from_Silesia2.jpg',
-        'https://upload.wikimedia.org/wikipedia/commons/4/41/Sunflower_from_Silesia2.jpg',
-        'https://upload.wikimedia.org/wikipedia/commons/4/41/Sunflower_from_Silesia2.jpg',
-        'https://upload.wikimedia.org/wikipedia/commons/4/41/Sunflower_from_Silesia2.jpg']
+        fetch('http://localhost:5200/getImage/accessories')
+        .then(res => res.json())
+        .then(res => filenames.append(res))
     } else if (clothes === 'tops') {
-        pictures = ['https://upload.wikimedia.org/wikipedia/commons/4/41/Sunflower_from_Silesia2.jpg']
-    } else {
+        fetch('http://localhost:5200/getImage/tops')
+        .then(res => res.json())
+        .then(res => filenames.append(res))
+    } else if (clothes === 'bottoms') {
+        fetch('http://localhost:5200/getImage/bottoms')
+        .then(res => res.json())
+        .then(res => filenames.append(res))
+    } else if (clothes === 'shoes') {
+        fetch('http://localhost:5200/getImage/shoes')
+        .then(res => res.json())
+        .then(res => filenames.append(res))
     }
+
+    let pictures = [];
+    for(let i=0; i<filenames.length(); i++) {
+        fetch(`http://localhost:5200/getPictureWithPath/${filenames[i]}`)
+        .then(res => res.json())
+        .then(data => pictures.append(data));
+    } 
 
     const cardComponent = pictures.map((picture) => {
         return (

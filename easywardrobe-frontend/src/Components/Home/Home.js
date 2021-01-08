@@ -65,7 +65,21 @@ class Home extends React.Component{
     }
 
     onOutfitSave = () => {
-
+        fetch('http://localhost:5200/addOutfit', {
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                aImage: this.state.aImage,
+                tImage: this.state.tImage,
+                bImage: this.state.bImage,
+                sImage: this.state.sImage
+            })
+        }).then(res => res.json())
+        .then(data => {
+            if (data === 'success') {
+                this.setState({ aImage: '', bImage: '', tImage:'', sImage:''})
+            }
+        })
     }
 
     render() {
