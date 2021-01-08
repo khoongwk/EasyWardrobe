@@ -254,18 +254,16 @@ def send_image(filename):
 #             cursor_categories.close()
 #             connection.close()
 
-@app.route("/deleteItem", methods=["GET"])
+@app.route("/deleteItem", methods=["POST"])
 def delete_item():
     try:
         toBeDeleted = request.get_json()
         connection = connect_db()
         cursor = connection.cursor()
         delete_statement = "DELETE FROM clothings WHERE clothing_type=%s AND relative_path=%s;"
-        item = (toBeDeleted["image_type"], toBeDeleted["relative_path"])
-        cursor.execute(delete_statement, item)
+        cursor.execute(delete_statement, (toBeDeleted["image_type"], toBeDeleted["relative_path"]))
         
         return "Successfully Deleted Record"
-
     except (Exception, psycopg2.Error) as error:
         if(connection):
             print("Error while inserting into outfits table", error)
@@ -317,13 +315,13 @@ def getOutfits():
             connection.close()
             # print("PostgreSQL connection is closed")
 
-@app.route("/deleteOutfit/<id>", methods=["GET"])
-def delete_outfits(id):
+@app.route("/deleteOutfit/<outfit_id>", methods=["POST"])
+def delete_outfits(outfit_id):
     try:
         connection = connect_db()
         cursor = connection.cursor()
         delete_statement = "DELETE FROM outfits WHERE outfit_id=%s;"
-        cursor.execute(delete_statement, id)
+        cursor.execute(delete_statement, (outfit_id,))
 
         return "Successfully Deleted Record"
 
