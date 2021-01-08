@@ -30,7 +30,7 @@ app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
 # Use localhost for local database (with the default password set for your system).
 def connect_db():
     connection = psycopg2.connect(user="postgres",
-                                password="01041996",
+                                password="relaxaholics",
                                 host="localhost",
                                 port="5432",
                                 database="easywar")
@@ -311,8 +311,8 @@ def getOutfits():
 
         quote_select_query = """SELECT * FROM outfits"""
         cursor.execute(quote_select_query)
-        # connection.commit()
-        # count = cursor.rowcount
+        connection.commit()
+        count = cursor.rowcount
         data = cursor.fetchall()
 
         outfits = []
@@ -323,7 +323,7 @@ def getOutfits():
             }
             outfits.append(outfit)
 
-        print("Outfits successfully selected from outfits table")
+        print(count, "Outfits successfully selected from outfits table")
         
         return {outfits}
     
