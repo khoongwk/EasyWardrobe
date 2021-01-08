@@ -15,10 +15,10 @@ const ClothesCategory = ({ handleCategoryChange }) => {
           onChange={handleCategoryChange}
           displayEmpty
         >
-          <MenuItem value={"Accessories"}>Accessories</MenuItem>
-          <MenuItem value={"Tops"}>Tops</MenuItem>
-          <MenuItem value={"Bottoms"}>Bottoms</MenuItem>
-          <MenuItem value={"Shoes"}>Shoes</MenuItem>
+          <MenuItem value={"accessories"}>Accessories</MenuItem>
+          <MenuItem value={"tops"}>Tops</MenuItem>
+          <MenuItem value={"bottoms"}>Bottoms</MenuItem>
+          <MenuItem value={"shoes"}>Shoes</MenuItem>
         </Select>
       </FormControl>
     </Fragment>

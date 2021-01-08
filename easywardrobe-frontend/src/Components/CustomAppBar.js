@@ -34,7 +34,8 @@ function CustomAppBar(props) {
   }
 
   const handleNavLoginPage = () => {
-    props.history.push("/login");
+    props.onLogoutHandler();
+    props.history.push("/")
   }
 
   return (

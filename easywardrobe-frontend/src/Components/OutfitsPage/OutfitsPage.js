@@ -19,7 +19,7 @@ const styles = {
   }
 };
 
-class WardrobePage extends Component {
+class OutfitsPage extends Component {
 
   render() {
     return (
@@ -30,9 +30,14 @@ class WardrobePage extends Component {
             <OutfitsList />
           </Typography>
         </Card>
+        <Grid container>
+          <Card>
+            <Grid item></Grid>
+          </Card>
+        </Grid>
       </Box>
     )
   }
 }
 
-export default withStyles(styles)(WardrobePage)
+export default withStyles(styles)(OutfitsPage)

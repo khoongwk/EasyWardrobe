@@ -3,6 +3,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import { CardActionArea} from '@material-ui/core';
 import CardList from './CardList';
 import OutfitCard from './OutfitCard';
 
@@ -89,20 +90,28 @@ class Home extends React.Component{
                 <Grid item xs={9}>
                     <Grid container spacing={3}>
                         <Grid item xs={3}>
-                            <Paper onClick={this.onAccessoriesClick}
-                            className={this.props.classes.paper}>Accessories</Paper>
+                            <CardActionArea>
+                                <Paper onClick={this.onAccessoriesClick}
+                                className={this.props.classes.paper}>Accessories</Paper>
+                            </CardActionArea>
                         </Grid>
                         <Grid item xs={3}>
-                            <Paper onClick={this.onTopsClick}
-                            className={this.props.classes.paper}>Tops</Paper>
+                            <CardActionArea>
+                                <Paper onClick={this.onTopsClick}
+                                className={this.props.classes.paper}>Tops</Paper>
+                            </CardActionArea>
                         </Grid>
                         <Grid item xs={3}>
-                            <Paper onClick={this.onBottomsClick}
-                            className={this.props.classes.paper}>Bottoms</Paper>
+                            <CardActionArea>
+                                <Paper onClick={this.onBottomsClick}
+                                className={this.props.classes.paper}>Bottoms</Paper>
+                            </CardActionArea>
                         </Grid>
                         <Grid item xs={3}>
-                            <Paper onClick={this.onShoesClick}
-                            className={this.props.classes.paper}>Shoes</Paper>
+                            <CardActionArea>
+                                <Paper onClick={this.onShoesClick}
+                                className={this.props.classes.paper}>Shoes</Paper>
+                            </CardActionArea>
                         </Grid>
                     </Grid>
                     <Grid container>

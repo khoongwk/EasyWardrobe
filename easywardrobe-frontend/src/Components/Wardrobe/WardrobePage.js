@@ -1,6 +1,7 @@
 // Outfits page containing all user-uploaded clothes and functions to upload them.
 import React, { Component } from 'react';
 import ClothesCategory from './ClothesCategory'
+import ClothesCard from './ClothesCard'
 import { Button, Input, Grid, withStyles, Box, Card, CardContent, Typography, CardActions, CardActionArea, CardMedia  } from '@material-ui/core';
 import axios from 'axios'
 
@@ -22,20 +23,42 @@ class WardrobePage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      clothesData: [],
-      chosenCategory: "Accessories",
+      clothesFilepaths: [],
+      chosenCategory: "accessories",
       selectedFile: null
     }
     this.categorySwitch = this.categorySwitch.bind(this);
     this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
     this.fileUploadHandler = this.fileUploadHandler.bind(this);
+    this.loadJSON = this.loadJSON.bind(this);
+    this.onDeleteHandler = this.onDeleteHandler.bind(this)
   }
 
   // TODO fetch and process wardrobe data.
   componentDidMount() {
-    fetch('/clothesData')
+    const target_url = 'http://localhost:5200/getImage/' + this.state.chosenCategory 
+    fetch(target_url)
       .then(data => data.json())
-      .then(clothes => this.setState({ clothesData: clothes }))
+      .then(clothesJSON => this.loadJSON(clothesJSON))
+      .then(res => console.log(res))
+      .catch(error => console.log(error))
+  }
+
+  componentDidUpdate() {
+    const target_url = 'http://localhost:5200/getImage/' + this.state.chosenCategory 
+    fetch(target_url)
+      .then(data => data.json())
+      .then(clothesJSON => this.loadJSON(clothesJSON))
+      .then(res => console.log(res))
+      .catch(error => console.log(error))
+  }
+
+
+  loadJSON(json) {
+    const category = Object.keys(json[0])
+    if (category === "accessories") {
+      this.setState({clothesFilepaths: Object.values(json)[0]})
+    }
   }
 
   categorySwitch = (e) => {
@@ -49,10 +72,25 @@ class WardrobePage extends Component {
     })
   }
 
+  onDeleteHandler(imgsrc) {
+    const target_url = 'http://localhost:5200/deleteItem/'
+    axios.post(target_url, {"image_type": this.state.chosenCategory, "relative_path": imgsrc})
+    .then(res => console.log(res))
+    .catch(error => console.log(error))
+  }
+
+  // TODO POST to backend.
   fileUploadHandler = () => {
     const fd = new FormData();
     fd.append('append', this.state.selectedFile, this.state.selectedFile.name);
-    axios.post('/backendURL', fd)
+    const target_url = 'http://localhost:5200/uploadItem/' + this.state.chosenCategory
+    axios.post(target_url, fd, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(res => console.log(res))
+    .catch(error => console.log(error))
     alert('Submitted file!')
   }
 
@@ -82,13 +120,17 @@ class WardrobePage extends Component {
                   <Button onClick={this.fileUploadHandler}>Upload</Button>
                 </form>
               </Card>
+
+              {this.state.clothesFilepaths.map(
+                filePath => <ClothesCard imgsrc={filePath} onDeleteHandler={this.onDeleteHandler}/>
+              )}
+
             </Grid>
           </Grid>
         </Card>
       </Box>
     )
   }
-
 }
 
 export default withStyles(styles)(WardrobePage)

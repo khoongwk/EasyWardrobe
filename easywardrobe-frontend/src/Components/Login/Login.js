@@ -1,14 +1,6 @@
 import React from 'react';
 import { Grid, withStyles, Box, Card, CardContent, Typography, CardActions } from '@material-ui/core';
 
-const styles = {
-  container: {
-    alignItems: 'flex-start',
-    display: 'flex',
-    marginBottom: '5vh'
-  }
-};
-
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -41,14 +33,12 @@ class Login extends React.Component {
             } else if (data === 'Error - Invalid Password') {
                 alert('Error - Invalid Password');
             } else {
-                // return (
-                //     // Route to HomePage
-                // );
+              
             }
         })
         .catch((err) => console.log(err))
+        .finally(this.props.onAuthenticateHandler())
     }
-
 
     render() {
         return (
@@ -78,6 +68,5 @@ class Login extends React.Component {
           );
     }
 }
-
-export default withStyles(styles)(Login);
+export default Login;
 
