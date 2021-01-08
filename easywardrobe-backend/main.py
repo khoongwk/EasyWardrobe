@@ -22,8 +22,8 @@ jwt = JWTManager(app)
 CORS(app)
 app.config["JWT_SECRET_KEY"] = 'secret'
 app.config["IMAGE_TYPE_ACCESSORIES"] = "images\\accessories"
-app.config["IMAGE_TYPE_TOP"] = "images\\top"
-app.config["IMAGE_TYPE_BOTTOM"] = "images\\bottom"
+app.config["IMAGE_TYPE_TOP"] = "images\\tops"
+app.config["IMAGE_TYPE_BOTTOM"] = "images\\bottoms"
 app.config["IMAGE_TYPE_SHOES"] = "images\\shoes"
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
 
