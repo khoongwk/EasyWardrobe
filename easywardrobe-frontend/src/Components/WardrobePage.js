@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import ClothesCategory from './ClothesCategory'
 import plusSign from '../plusSign.png'
-import { Grid, withStyles, Box, Card, CardContent, Typography, CardActions, CardActionArea, CardMedia  } from '@material-ui/core';
+import { Input, Grid, withStyles, Box, Card, CardContent, Typography, CardActions, CardActionArea, CardMedia  } from '@material-ui/core';
 
 const styles = {
   container: {
@@ -41,8 +41,9 @@ class WardrobePage extends Component {
     this.setState({ chosenCategory: e.target.value });
   }
 
+
   handleUploadClick = () => {
-    alert("Upload clicked.")
+    this.fileInput.click();
   }
 
   render() {
@@ -61,14 +62,17 @@ class WardrobePage extends Component {
           </Grid>
         </Card>
 
-        <Card className={this.props.classes.container}>
-          <Grid className={this.props.classes.container}  xs={4} lg={2} item>
-          <Card >
-            <CardActionArea onClick={this.handleUploadClick}>
-              <h2>Upload image</h2>
-              <CardMedia component='img' src={plusSign} />
-            </CardActionArea>
-          </Card>
+        <Card className={this.props.classes.container}>         
+          <Grid className={this.props.classes.container} container>
+            <Grid xs={4} lg={2} item>
+              <Card >
+                <CardActionArea onClick={this.handleUploadClick}>
+                  <Input type="file" ref={fileInput => this.fileInput = fileInput}/>
+                  <h2>Upload image</h2>
+                  <CardMedia component='img' src={plusSign} />
+                </CardActionArea>
+              </Card>
+            </Grid>
           </Grid>
         </Card>
       </Box>
