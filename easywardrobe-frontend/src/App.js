@@ -19,8 +19,7 @@ class App extends Component {
         <BrowserRouter>
           <CustomAppBar />
           <Switch>
-            <Route exact path ='/' component={Login} />
-            <Route exact path='/home' component={Home} />
+            <Route exact path ='/' component={Home} />
             <Route exact path='/wardrobe' component={WardrobePage}/>
             <Route exact path='/outfits' component={OutfitsPage} />
           </Switch>
