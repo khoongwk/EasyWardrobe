@@ -22,7 +22,7 @@ const CardList = ({ clothes, onItemSelect }) => {
     }
 
     let pictures = [];
-    for(let i=0; i<filenames.length(); i++) {
+    for(let i=0; i<filenames.length; i++) {
         fetch(`http://localhost:5200/getPictureWithPath/${filenames[i]}`)
         .then(res => res.json())
         .then(data => pictures.append(data));
