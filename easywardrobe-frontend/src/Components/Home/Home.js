@@ -1,60 +1,111 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import CardList from './CardList';
+import OutfitCard from './OutfitCard';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = {
   root: {
     flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: 20,
     textAlign: 'center',
-    color: theme.palette.text.secondary,
     margin: 10
   },
   Grid: {
       padding: 10,
-      alignItems: 'center'
+      alignItems: 'stretch'
   }
-}));
+};
 
-export default function Home() {
-  const classes = useStyles();
+class Home extends React.Component{
 
-  return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={9}>
-            <Grid container spacing={3}>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>Accessories</Paper>
+    constructor(props) {
+        super(props);
+        this.state = {
+            clothes: '',
+            aImage: '',
+            tImage: '',
+            bImage: '',
+            sImage: ''
+        }
+    }
+
+    onAccessoriesClick = () => {
+        this.setState({ clothes: 'accessories'})
+    }
+
+    onTopsClick = () => {
+        this.setState({ clothes: 'tops'})
+    }
+
+    onBottomsClick = () => {
+        this.setState({ clothes: 'bottoms'})
+    }
+
+    onShoesClick = () => {
+        this.setState({ clothes: 'shoes'})
+    }
+
+    onItemSelect = (imageInput, clothesType) => {
+        if (clothesType === 'accessories') {
+            this.setState({ aImage: imageInput })
+        } else if (clothesType === 'tops') {
+            this.setState({ tImage: imageInput })
+        } else if (clothesType === 'bottoms') {
+            this.setState({ bImage: imageInput })
+        } else if (clothesType === 'shoes') {
+            this.setState({ sImage: imageInput })
+        } else {
+            console.log("Error!!!");
+        }
+    }
+
+    onOutfitSave = () => {
+        
+    }
+
+    render() {
+        return (
+            <div className={this.props.classes.root}>
+              <Grid container spacing={3}>
+                <Grid item xs={9}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={3}>
+                            <Paper onClick={this.onAccessoriesClick}
+                            className={this.props.classes.paper}>Accessories</Paper>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Paper onClick={this.onTopsClick}
+                            className={this.props.classes.paper}>Tops</Paper>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Paper onClick={this.onBottomsClick}
+                            className={this.props.classes.paper}>Bottoms</Paper>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Paper onClick={this.onShoesClick}
+                            className={this.props.classes.paper}>Shoes</Paper>
+                        </Grid>
+                    </Grid>
+                    <Grid container>
+                        <CardList clothes={this.state.clothes} onItemSelect={this.onItemSelect}/>
+                    </Grid>
                 </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>Tops</Paper>
+                <Grid className={this.props.classes.Grid} item xs={3}>
+                  <OutfitCard className={this.props.classes.paper} image={this.state.aImage}/>
+                  <OutfitCard className={this.props.classes.paper} image={this.state.tImage}/>
+                  <OutfitCard className={this.props.classes.paper} image={this.state.bImage}/>
+                  <OutfitCard className={this.props.classes.paper} image={this.state.sImage}/>
+                  <Button onClick={this.onOutfitSave}> Save </Button>
                 </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>Bottoms</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>Shoes</Paper>
-                </Grid>
-            </Grid>
-            <Grid>
-                <Paper className={classes.paper}>Display</Paper>
-            </Grid>
-        </Grid>
-        <Grid className={classes.Grid} item xs={3}>
-          <Paper className={classes.paper}>Accessories</Paper>
-          <Paper className={classes.paper}>Tops</Paper>
-          <Paper className={classes.paper}>Bottoms</Paper>
-          <Paper className={classes.paper}>Shoes</Paper>
-          <Button> Save </Button>
-        </Grid>
-      </Grid>
-    </div>
-  );
+              </Grid>
+            </div>
+          );
+    }
 }
-
+export default withStyles(useStyles)(Home)
 

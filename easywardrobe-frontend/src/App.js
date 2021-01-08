@@ -9,6 +9,10 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 
 class App extends Component {
+  constructor() {
+    super();
+  }
+
   render() {
     return (
       <Fragment>
