@@ -5,16 +5,16 @@ class OutfitCard extends React.Component {
         super(props);
     }
     render() {
-        if (this.image === '') {
+        if (this.props.image === '') {
             return (
                 <div>
-                    <img alt='clothes' src='http://personal.psu.edu/xqz5228/jpg.jpg'/>
+                    <img alt='clothes' width='200px' height='150px' src='https://upload.wikimedia.org/wikipedia/commons/b/b1/Grey_background.jpg'/>
                 </div>
             );
         } else {
             return (
                 <div>
-                    <img alt='clothes' src={this.props.image} />
+                    <img width='200px' height='auto' alt='clothes' src={this.props.image} />
                 </div>
             );
         }

@@ -65,13 +65,13 @@ class Home extends React.Component{
     }
 
     onOutfitSave = () => {
-        
+
     }
 
     render() {
         return (
             <div className={this.props.classes.root}>
-              <Grid container spacing={3}>
+              <Grid container spacing={30}>
                 <Grid item xs={9}>
                     <Grid container spacing={3}>
                         <Grid item xs={3}>
