@@ -30,7 +30,7 @@ app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
 # Use localhost for local database (with the default password set for your system).
 def connect_db():
     connection = psycopg2.connect(user="postgres",
-                                password="postgrespassword",
+                                password="01041996",
                                 host="localhost",
                                 port="5432",
                                 database="easywar")
@@ -254,10 +254,29 @@ def send_image(filename):
 #             cursor_categories.close()
 #             connection.close()
 
+@app.route("/deleteItem", methods=["GET"])
+def delete_item():
+    try:
+        toBeDeleted = request.get_json()
+        connection = connect_db()
+        cursor = connection.cursor()
+        delete_statement = "DELETE FROM clothings WHERE clothing_type=%s AND relative_path=%s;"
+        item = (toBeDeleted["image_type"], toBeDeleted["relative_path"])
+        cursor.execute(delete_statement, item)
+        
+        return "Successfully Deleted Record"
+
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            print("Error while inserting into outfits table", error)
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            # print("PostgreSQL connection is closed")
+
 @app.route("/addOutfit", methods=["GET"])
-def add_outfit():
-    json.request[]
-    
+def add_outfit(): 
     try:
         connection = connect_db()
         cursor = connection.cursor()
@@ -279,7 +298,43 @@ def add_outfit():
             # print("PostgreSQL connection is closed")
 
 @app.route("/getOutfits", methods=["GET"])
-def getOutfits
+def getOutfits():
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
+
+        quote_select_query = """SELECT * FROM outfits"""
+        cursor.execute(quote_select_query)
+
+        print(cursor.fetchall())
+
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            print("Error while inserting into outfits table", error)
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            # print("PostgreSQL connection is closed")
+
+@app.route("/deleteOutfit/<id>", methods=["GET"])
+def delete_outfits(id):
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
+        delete_statement = "DELETE FROM outfits WHERE outfit_id=%s;"
+        cursor.execute(delete_statement, id)
+
+        return "Successfully Deleted Record"
+
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            print("Error while inserting into outfits table", error)
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            # print("PostgreSQL connection is closed")
 
 if __name__ == '__main__':
     # app.run(debug=True)
