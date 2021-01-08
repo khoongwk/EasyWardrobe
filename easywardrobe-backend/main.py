@@ -25,21 +25,10 @@ def start_up():
 @app.route('/register', methods=['POST'])
 def register():
     user_name = request.get_json()["username"]
-    email = request.get_json()["email"]
     password = bcrypt.generate_password_hash(request.get_json()["password"]).decode("utf-8")
     created = datetime.now()
-    arg_dict = {"username": user_name.lower()}
-    hit = esMethod.search_exact_docs(client=es, index="user", arg_dict=arg_dict)
-    if len(hit) == 0:
-        json_data = {
-            "email": email,
-            "password": password,
-            "created": created
-        }
-        json_data.update(arg_dict)
-        return esMethod.create_without_uuid(client=es, index="user", json_data=json_data)
-    else:
-        return "Username already exist"
+    
+    # check if username already taken
 
 
 # Login user
@@ -47,24 +36,28 @@ def register():
 def login():
     user_name = request.get_json()["username"]
     password = request.get_json()["password"]
-    result = ""
-    arg_dict = {
-        "username": user_name.lower()
-    }
-    print(arg_dict)
-    hits = esMethod.search_exact_docs(client=es, index="user", arg_dict=arg_dict)
-    if len(hits) == 0:
-        return "Error - Username not found"
-    else:
-        body = hits[0]["body"]
-        to_check_password = body["password"]
-        if bcrypt.check_password_hash(to_check_password, password):
-            access_token = create_access_token(identity={"email": body["email"], "uuid": hits[0]["uuid"]})
-            print(type(access_token))
-            dic = {"token": access_token}
-            return dic
-        else:
-            return "Error - Invalid password"
+
+    # Basically check if username exist, if yes check the hash password to see if match
+
+
+    # arg_dict = {
+    #     "username": user_name.lower()
+    # }
+    # print(arg_dict)
+    # hits = esMethod.search_exact_docs(client=es, index="user", arg_dict=arg_dict)
+    # if len(hits) == 0:
+    #     return "Error - Username not found"
+    # else:
+    #     body = hits[0]["body"]
+    #     to_check_password = body["password"]
+    #     if bcrypt.check_password_hash(to_check_password, password):
+    #         access_token = create_access_token(identity={"email": body["email"], "uuid": hits[0]["uuid"]})
+    #         print(type(access_token))
+    #         dic = {"token": access_token}
+    #         return dic
+    #     else:
+    #         return "Error - Invalid password"
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5200)
