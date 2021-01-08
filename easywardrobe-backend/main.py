@@ -30,7 +30,7 @@ app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
 # Use localhost for local database (with the default password set for your system).
 def connect_db():
     connection = psycopg2.connect(user="postgres",
-                                password="01041996",
+                                password="relaxaholics",
                                 host="localhost",
                                 port="5432",
                                 database="easywar")
@@ -257,31 +257,39 @@ def send_image(filename):
 @app.route("/deleteItem", methods=["POST"])
 def delete_item():
     try:
-        toBeDeleted = request.get_json()
+        relative_path = request.get_json()["relative_path"]
         connection = connect_db()
         cursor = connection.cursor()
-        delete_statement = "DELETE FROM clothings WHERE clothing_type=%s AND relative_path=%s;"
-        cursor.execute(delete_statement, (toBeDeleted["image_type"], toBeDeleted["relative_path"]))
-        
+
+        delete_statement = "DELETE FROM clothings WHERE relative_path=%s;"
+        record_to_delete = (relative_path,)
+        cursor.execute(delete_statement, record_to_delete)
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Item deleted successfully from clothings table")
+
         return "Successfully Deleted Record"
     except (Exception, psycopg2.Error) as error:
         if(connection):
-            print("Error while inserting into outfits table", error)
+            print("Error while deleting from clothings table", error)
     finally:
         if(connection):
             cursor.close()
             connection.close()
             # print("PostgreSQL connection is closed")
 
-@app.route("/addOutfit", methods=["GET"])
+@app.route("/addOutfit", methods=["POST"]) #this doesnt work
 def add_outfit(): 
+    outfit_arr = request.get_json()["item"]
+    print(outfit_arr)
+
     try:
         connection = connect_db()
         cursor = connection.cursor()
 
         postgres_insert_query = """ INSERT INTO outfits (outfit_id, saved_clothings) 
                                     VALUES (DEFAULT, %s)"""
-        record_to_insert = (relative_path,)
+        record_to_insert = (outfit_arr,)
         cursor.execute(postgres_insert_query, record_to_insert)
         connection.commit()
         count = cursor.rowcount
@@ -295,7 +303,7 @@ def add_outfit():
             connection.close()
             # print("PostgreSQL connection is closed")
 
-@app.route("/getOutfits", methods=["GET"])
+@app.route("/getOutfits", methods=["GET"]) #change
 def getOutfits():
     try:
         connection = connect_db()
@@ -315,19 +323,22 @@ def getOutfits():
             connection.close()
             # print("PostgreSQL connection is closed")
 
-@app.route("/deleteOutfit/<outfit_id>", methods=["POST"])
+@app.route("/deleteOutfit/<int:outfit_id>", methods=["POST"])
 def delete_outfits(outfit_id):
     try:
         connection = connect_db()
         cursor = connection.cursor()
-        delete_statement = "DELETE FROM outfits WHERE outfit_id=%s;"
-        cursor.execute(delete_statement, (outfit_id,))
+        delete_statement = "DELETE FROM outfits WHERE outfit_id={0};".format(outfit_id)
 
+        cursor.execute(delete_statement)
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Outfit deleted successfully from outfits table")
         return "Successfully Deleted Record"
 
     except (Exception, psycopg2.Error) as error:
         if(connection):
-            print("Error while inserting into outfits table", error)
+            print("Error while deleting from outfits table", error)
     finally:
         if(connection):
             cursor.close()
