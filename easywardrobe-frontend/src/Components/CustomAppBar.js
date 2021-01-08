@@ -22,7 +22,7 @@ function CustomAppBar(props) {
   const classes = useStyles();
 
   const handleNavHome = () => {
-    props.history.push("/");
+    props.history.push("/home");
   };
 
   const handleNavWardrobePage = () => {
@@ -31,11 +31,6 @@ function CustomAppBar(props) {
 
   const handleNavOutfitsPage = () => {
     props.history.push("/outfits");
-  }
-
-  const handleLogouts = () => {
-    props.handleLogoutUser()
-    props.history.push('/')
   }
 
   return (
