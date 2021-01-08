@@ -98,9 +98,6 @@ def login():
             print("Invalid password")
             return "Error - Invalid password"
 
-        connection.commit()
-        count = cursor.rowcount
-
     except (Exception, psycopg2.Error) as error:
         if(connection):
             raise Exception("Error while selecting record from users table.")
@@ -187,72 +184,36 @@ def send_image(filename):
     except FileNotFoundError: 
         abort(404)
 
-# @app.route("/getImage/type", methods=["GET"])
+@app.route("/getImage/<image_type>", methods=["GET"])
 
-# def get_image(type):
-#     try:
-#         connection = connect_db()
-#         cursor = connection.cursor()
+def get_image(image_type): 
+    try:
+        connection = connect_db()
+        cursor = connection.cursor()
 
-#         postgres_select_query = """ SELECT FROM clothings (clothing_type, relative_path) 
-#                                     VALUES (%s, %s)"""
-#         record_to_insert = (imageType, relative_path,)
-#         cursor.execute(postgres_select_query, record_to_insert)
-#         connection.commit()
-#         count = cursor.rowcount
-#         print(count, "Clothing item inserted successfully into cslothings table")
-#     except (Exception, psycopg2.Error) as error:
-#         if(connection):
-#             print("Error while inserting into clothings table", error)
-#     finally:
-#         if(connection):
-#             cursor.close()
-#             connection.close()
-#             # print("PostgreSQL connection is closed")
+        postgres_select_query = """ SELECT * FROM clothings WHERE clothing_type = %s """
+        record_to_select = (image_type,)
+        cursor.execute(postgres_select_query, record_to_select)
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Clothing item successfully selected from clothings table")
 
-#         {item:[relative path, path]}
-# ///////
-#         try:
-#         connection = connect_db()
-#         cursor_categories = connection.cursor()
-#         cursor_quotes = connection.cursor(
-#             cursor_factory=psycopg2.extras.RealDictCursor)
-#         categories_query = (
-#             " SELECT category_id FROM category WHERE category_type = b'0';"
-#         )
-#         cursor_categories.execute(categories_query)
-#         connection.commit()
-#         categories_list = cursor_categories.fetchall()
-#         final_output = {}
-#         for category_id in categories_list:
-#             quote_select_query = """SELECT quotes_id, quotes_author, quotes_description, category_id
-#                                     FROM quotes WHERE category_id = %s;"""
-#             cursor_quotes.execute(quote_select_query, category_id)
-#             current_category_quotes = cursor_quotes.fetchall()
-#             print(current_category_quotes)
+        output = {}
+        raw_arr = cursor.fetchall()
+        output_arr = []
 
-#             current_category_query = (
-#                 "SELECT category_info FROM category WHERE category_id = %s;"
-#             )
-#             cursor_categories.execute(current_category_query, category_id)
-#             (category_name,) = cursor_categories.fetchall()[0]
-#             print(category_name)
-
-#             connection.commit()
-#             final_output.update({category_name: current_category_quotes})
-
-#         print("Successful GET of all quotes.")
-#         return json.dumps(final_output)
-
-#     except (Exception, psycopg2.DatabaseError) as error:
-#         print("Error while getting quotes table and converting to JSON.", error)
-
-#     finally:
-#         # Closing database connection.
-#         if connection:
-#             cursor_quotes.close()
-#             cursor_categories.close()
-#             connection.close()
+        for i in raw_arr:
+            output_arr.append(i[1])
+        output.update({"items": output_arr})
+        return json.dumps(output)
+    except (Exception, psycopg2.Error) as error:
+        if(connection):
+            print("Error while selecting from clothings table", error)
+    finally:
+        if(connection):
+            cursor.close()
+            connection.close()
+            # print("PostgreSQL connection is closed")
 
 @app.route("/deleteItem", methods=["POST"])
 def delete_item():
@@ -324,9 +285,10 @@ def getOutfits():
             outfits.append(outfit)
 
         print(count, "Outfits successfully selected from outfits table")
-        
-        return {outfits}
-    
+
+        print(cursor.fetchall())
+
+
     except (Exception, psycopg2.Error) as error:
         if(connection):
             print("Error while selecting from outfits table", error)
