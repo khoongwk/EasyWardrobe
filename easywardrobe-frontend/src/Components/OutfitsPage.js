@@ -17,7 +17,7 @@ class WardrobePage extends Component {
     return (
       <Box className={this.props.classes.bg}>
         <Typography>
-          <h1>wardrobe</h1>
+          <h1>My saved outfits</h1>
         </Typography>
       </Box>
     )
