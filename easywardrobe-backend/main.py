@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 
 # Flask Playground
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, abort
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
@@ -103,9 +103,17 @@ def upload_item(imageType):
                 print("Wrong image type")
                 return "Error in uploading"
             
+            print(os.path.join(path, image.filename))
             image.save(os.path.join(path, image.filename))
             return "Upload Successful"
 
+@app.route("/sendImage/<path:filename>", methods=["GET"])
+def send_image(filename):
+    try: 
+        path = filename.split("/")
+        return send_from_directory(path[0] + "\\" + path[1], filename=path[2])
+    except FileNotFoundError:
+        abort(404)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5200)
