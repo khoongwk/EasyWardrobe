@@ -137,9 +137,9 @@ def upload_item(imageType):
 
             if imageType == "accessories":
                 path = app.config["IMAGE_TYPE_ACCESSORIES"]
-            elif imageType == "top":
+            elif imageType == "tops":
                 path = app.config["IMAGE_TYPE_TOP"]
-            elif imageType == "bottom":
+            elif imageType == "bottoms":
                 path = app.config["IMAGE_TYPE_BOTTOM"]
             elif imageType == "shoes":
                 path = app.config["IMAGE_TYPE_SHOES"]

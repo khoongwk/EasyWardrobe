@@ -25,7 +25,8 @@ class WardrobePage extends Component {
     this.state = {
       clothesFilepaths: [],
       chosenCategory: "accessories",
-      selectedFile: null
+      selectedFile: null,
+      canRefresh: false
     }
     this.categorySwitch = this.categorySwitch.bind(this);
     this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
@@ -53,17 +54,15 @@ class WardrobePage extends Component {
       .catch(error => console.log(error))
   }
 
-
   loadJSON(json) {
-    const category = Object.keys(json[0])
-    if (category === "accessories") {
-      this.setState({clothesFilepaths: Object.values(json)[0]})
+    if (this.state.canRefresh) {
+      this.setState({clothesFilepaths: Object.values(json)[0], canRefresh: false});
     }
   }
 
   categorySwitch = (e) => {
     console.log(e.target.value);
-    this.setState({ chosenCategory: e.target.value });
+    this.setState({ chosenCategory: e.target.value, canRefresh: true });
   }
 
   fileSelectedHandler = (event) => {
@@ -81,16 +80,17 @@ class WardrobePage extends Component {
 
   // TODO POST to backend.
   fileUploadHandler = () => {
-    const fd = new FormData();
-    fd.append('append', this.state.selectedFile, this.state.selectedFile.name);
+    const image = new FormData();
+    image.append('image', this.state.selectedFile);
     const target_url = 'http://localhost:5200/uploadItem/' + this.state.chosenCategory
-    axios.post(target_url, fd, {
+    axios.post(target_url, image, {
       headers: {
+        'accept': '*/*',
         'Content-Type': 'multipart/form-data'
       }
     })
     .then(res => console.log(res))
-    .catch(error => console.log(error))
+    .catch(error => console.log(error.response))
     alert('Submitted file!')
   }
 
@@ -122,7 +122,10 @@ class WardrobePage extends Component {
               </Card>
 
               {this.state.clothesFilepaths.map(
-                filePath => <ClothesCard imgsrc={filePath} onDeleteHandler={this.onDeleteHandler}/>
+                filePath => {
+                  console.log('..\\easywardrobe-backend' + filePath)
+                  return <ClothesCard imgsrc={'..\\easywardrobe-backend\\' + filePath}   onDeleteHandler={this.onDeleteHandler}/>
+                } 
               )}
 
             </Grid>

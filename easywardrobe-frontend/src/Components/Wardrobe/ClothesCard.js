@@ -7,7 +7,7 @@ const ClothesCard = (imgsrc, onDeleteHandler) => (
       <CardMedia >
         <img width="350px" height="auto" src={imgsrc}/>
       </CardMedia>
-      <Button onClick={onDeleteHandler(imgsrc)}/>
+      <Button onClick={() => onDeleteHandler(imgsrc)}/>
     </CardContent>
   </Card>
 );
