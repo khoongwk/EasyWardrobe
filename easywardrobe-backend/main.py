@@ -1,7 +1,8 @@
 from datetime import datetime
+import os
 
 # Flask Playground
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, abort
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
@@ -16,10 +17,15 @@ import requests
 
 from flask import Flask, request
 app = Flask(__name__)
-app.config["JWT_SECRET_KEY"] = 'secret'
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 CORS(app)
+app.config["JWT_SECRET_KEY"] = 'secret'
+app.config["IMAGE_TYPE_ACCESSORIES"] = "images\\accessories"
+app.config["IMAGE_TYPE_TOP"] = "images\\top"
+app.config["IMAGE_TYPE_BOTTOM"] = "images\\bottom"
+app.config["IMAGE_TYPE_SHOES"] = "images\\shoes"
+app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
 
 # Use localhost for local database (with the default password set for your system).
 def connect_db():
@@ -104,6 +110,57 @@ def login():
             cursor.close()
             connection.close()
             #print("PostgreSQL connection is closed") 
+
+def allowed_image(filename):
+
+    if filename == "":
+        print("No file name")
+        return False
+
+    if not "." in filename:
+        print("Invalid file")
+        return False
+    
+    ext = filename.rsplit(".", 1)[1]
+
+    if ext.upper() in app.config["ALLOWED_IMAGE_EXTENSIONS"]:
+        return True
+    else:
+        return False
+
+@app.route("/uploadItem/<imageType>", methods=["POST"])
+def upload_item(imageType):
+    if request.method == "POST":
+        if request.files:
+            image = request.files["image"]
+            
+            if not allowed_image(image.filename):
+                print("Extension not allowed")
+                return "Error in uploading"
+
+            if imageType == "accessories":
+                path = app.config["IMAGE_TYPE_ACCESSORIES"]
+            elif imageType == "top":
+                path = app.config["IMAGE_TYPE_TOP"]
+            elif imageType == "bottom":
+                path = app.config["IMAGE_TYPE_BOTTOM"]
+            elif imageType == "shoes":
+                path = app.config["IMAGE_TYPE_SHOES"]
+            else:
+                print("Wrong image type")
+                return "Error in uploading"
+            
+            print(os.path.join(path, image.filename))
+            image.save(os.path.join(path, image.filename))
+            return "Upload Successful"
+
+@app.route("/sendImage/<path:filename>", methods=["GET"])
+def send_image(filename):
+    try: 
+        path = filename.split("/")
+        return send_from_directory(path[0] + "\\" + path[1], filename=path[2])
+    except FileNotFoundError:
+        abort(404)
 
 if __name__ == '__main__':
     # app.run(debug=True)
