@@ -30,7 +30,7 @@ app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["PNG", "JPG", "JPEG", "GIF"]
 # Use localhost for local database (with the default password set for your system).
 def connect_db():
     connection = psycopg2.connect(user="postgres",
-                                password="relaxaholics",
+                                password="01041996",
                                 host="localhost",
                                 port="5432",
                                 database="easywar")
@@ -97,7 +97,10 @@ def login():
         else:
             print("Invalid password")
             return "Error - Invalid password"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 405b5152f3dc33da434a6a2e2d02d288d990d1cf
     except (Exception, psycopg2.Error) as error:
         if(connection):
             raise Exception("Error while selecting record from users table.")
@@ -272,23 +275,22 @@ def getOutfits():
 
         quote_select_query = """SELECT * FROM outfits"""
         cursor.execute(quote_select_query)
-        connection.commit()
-        count = cursor.rowcount
+        # connection.commit()
+        # count = cursor.rowcount
         data = cursor.fetchall()
 
         outfits = []
         for outfits_raw in data:
             outfit = {
-                "outfit_id": data[0],
-                "items" : data[1]
+                "outfit_id": outfits_raw[0],
+                "items" : outfits_raw[1]
             }
             outfits.append(outfit)
 
-        print(count, "Outfits successfully selected from outfits table")
-
-        print(cursor.fetchall())
-
-
+        print("Outfits successfully selected from outfits table")
+        print (outfits)
+        return { "outfits" : outfits}
+    
     except (Exception, psycopg2.Error) as error:
         if(connection):
             print("Error while selecting from outfits table", error)
