@@ -11,12 +11,12 @@ const ClothesCategory = ({ handleCategoryChange }) => {
         <Select
           labelId="category-label"
           id="category-select-label"
-          defaultValue={"All"}
+          defaultValue={"Accessories"}
           onChange={handleCategoryChange}
           displayEmpty
         >
           <MenuItem value={"Accessories"}>Accessories</MenuItem>
-          <MenuItem value={"Top"}>Top</MenuItem>
+          <MenuItem value={"Tops"}>Tops</MenuItem>
           <MenuItem value={"Bottoms"}>Bottoms</MenuItem>
           <MenuItem value={"Shoes"}>Shoes</MenuItem>
         </Select>
