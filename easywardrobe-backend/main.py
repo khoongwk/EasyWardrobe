@@ -168,7 +168,7 @@ def insert_clothing(imageType, relative_path):
         cursor.execute(postgres_insert_query, record_to_insert)
         connection.commit()
         count = cursor.rowcount
-        print(count, "Clothing item inserted successfully into clothings table")
+        return("Clothing item inserted successfully into clothings table")
     except (Exception, psycopg2.Error) as error:
         if(connection):
             print("Error while inserting into clothings table", error)
@@ -278,7 +278,7 @@ def delete_item():
             connection.close()
             # print("PostgreSQL connection is closed")
 
-@app.route("/addOutfit", methods=["POST"]) #this doesnt work
+@app.route("/addOutfit", methods=["POST"]) 
 def add_outfit(): 
     outfit_arr = request.get_json()["item"]
     print(outfit_arr)
@@ -293,7 +293,7 @@ def add_outfit():
         cursor.execute(postgres_insert_query, record_to_insert)
         connection.commit()
         count = cursor.rowcount
-        print(count, "Outfit inserted successfully into outfits table")
+        return("Outfit inserted successfully into outfits table")
     except (Exception, psycopg2.Error) as error:
         if(connection):
             print("Error while inserting into outfits table", error)
@@ -303,7 +303,7 @@ def add_outfit():
             connection.close()
             # print("PostgreSQL connection is closed")
 
-@app.route("/getOutfits", methods=["GET"]) #change
+@app.route("/getOutfits", methods=["GET"]) 
 def getOutfits():
     try:
         connection = connect_db()
@@ -311,12 +311,15 @@ def getOutfits():
 
         quote_select_query = """SELECT * FROM outfits"""
         cursor.execute(quote_select_query)
-
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Outfits successfully selected from outfits table")
         print(cursor.fetchall())
+        
 
     except (Exception, psycopg2.Error) as error:
         if(connection):
-            print("Error while inserting into outfits table", error)
+            print("Error while selecting from outfits table", error)
     finally:
         if(connection):
             cursor.close()
