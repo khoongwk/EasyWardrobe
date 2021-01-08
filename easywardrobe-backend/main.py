@@ -97,10 +97,7 @@ def login():
         else:
             print("Invalid password")
             return "Error - Invalid password"
-<<<<<<< HEAD
 
-=======
->>>>>>> 405b5152f3dc33da434a6a2e2d02d288d990d1cf
     except (Exception, psycopg2.Error) as error:
         if(connection):
             raise Exception("Error while selecting record from users table.")
