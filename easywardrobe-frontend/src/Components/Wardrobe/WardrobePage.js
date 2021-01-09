@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import ClothesCategory from './ClothesCategory'
 import ClothesCard from './ClothesCard'
 import { Button, Input, Grid, withStyles, Box, Card, CardContent, Typography, CardActions, CardActionArea, CardMedia  } from '@material-ui/core';
-// import axios from 'axios'
+import axios from 'axios'
 
 const styles = {
   container: {
@@ -26,13 +26,14 @@ class WardrobePage extends Component {
       clothesFilepaths: [],
       chosenCategory: "accessories",
       selectedFile: null,
-      canRefresh: false
+      canRefresh: false,
+      isSubmitted: false
     }
     this.categorySwitch = this.categorySwitch.bind(this);
     this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
     this.fileUploadHandler = this.fileUploadHandler.bind(this);
     this.loadJSON = this.loadJSON.bind(this);
-    this.onDeleteHandler = this.onDeleteHandler.bind(this)
+    // this.onDeleteHandler = this.onDeleteHandler.bind(this)
   }
 
   // TODO fetch and process wardrobe data.
@@ -71,12 +72,12 @@ class WardrobePage extends Component {
     })
   }
 
-  onDeleteHandler(imgsrc) {
-    // const target_url = 'http://localhost:5200/deleteItem/'
-    // axios.post(target_url, {"image_type": this.state.chosenCategory, "relative_path": imgsrc})
-    // .then(res => console.log(res))
-    // .catch(error => console.log(error))
-  }
+  // onDeleteHandler(imgsrc) {
+  //   const target_url = 'http://localhost:5200/deleteItem/'
+  //   axios.post(target_url, {"image_type": this.state.chosenCategory, "relative_path": imgsrc})
+  //   .then(res => console.log(res))
+  //   .catch(error => console.log(error))
+  // }
 
   // TODO POST to backend.
   fileUploadHandler = () => {
@@ -91,7 +92,28 @@ class WardrobePage extends Component {
     // })
     // .then(res => console.log(res))
     // .catch(error => console.log(error.response))
-    // alert('Submitted file!')
+    this.setState({isSubmitted: true})
+    alert('Submitted file!')
+  }
+
+  get selectedImage() {
+    let imgsrc = ""
+    if (this.state.chosenCategory === "accessories") {
+      imgsrc = "https://hips.hearstapps.com/amv-prod-gp.s3.amazonaws.com/gearpatrol/wp-content/uploads/2020/06/10-Best-Aviators-gear-patrol-6.jpg?resize=480:*"
+    } else if (this.state.chosenCategory === "tops") {
+      imgsrc = "https://kickz.akamaized.net/en/media/images/p/1200/guess-HERO_SEASONAL_WOMAN_CROP_TOP-OPTIC_WHITE-1.jpg"
+    } else if (this.state.chosenCategory === "bottoms") {
+      imgsrc = "https://i.pinimg.com/originals/3c/4e/00/3c4e00ae90a76c51162f95af7994be84.jpg"
+    } else {
+      imgsrc = "https://media.endclothing.com/media/f_auto,q_auto:eco/prodmedia/media/catalog/product/2/8/28-10-2019_nike_airforce107w_white_315115-112_mb_1.jpg"
+    }
+    return <Grid xs={4} lg={2} item>
+    <Card >
+      <CardMedia>
+        <img height="150px" src={imgsrc}/>
+      </CardMedia>
+    </Card>
+  </Grid> 
   }
 
   render() {
@@ -120,14 +142,19 @@ class WardrobePage extends Component {
                   <Button onClick={this.fileUploadHandler}>Upload</Button>
                 </form>
               </Card>
-              {this.state.clothesFilepaths.map(
-                filePath => {
-                  console.log('..\\easywardrobe-backend' + filePath)
-                  return <ClothesCard imgsrc="C:\Users\khoon\OneDrive\Documents\EasyWardrobe\easywardrobe-backend\images\tops\Figure_1.png"   onDeleteHandler={this.onDeleteHandler}/>
-                } 
-              )}
-
             </Grid>
+            {this.selectedImage}
+            {this.state.isSubmitted ?
+              <Grid xs={4} lg={2} item>
+                <Card >
+                  <CardMedia>
+                    <img height="150px" src="https://cdn.shopify.com/s/files/1/2638/7858/products/3c_2cabc37f-01a1-4d81-89ed-7431d1bf5842.jpg?v=1578598602"/>
+                  </CardMedia>
+                </Card>
+              </Grid> 
+             : null
+             }
+            
           </Grid>
         </Card>
       </Box>
