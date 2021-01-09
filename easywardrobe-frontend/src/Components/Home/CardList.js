@@ -50,7 +50,8 @@ class CardList extends React.Component {
     if (this.props.clothes === 'accessories') {
         pictures = ['https://hips.hearstapps.com/amv-prod-gp.s3.amazonaws.com/gearpatrol/wp-content/uploads/2020/06/10-Best-Aviators-gear-patrol-6.jpg?resize=480:*']
     } else if (this.props.clothes === 'tops') {
-        pictures = ['https://kickz.akamaized.net/en/media/images/p/1200/guess-HERO_SEASONAL_WOMAN_CROP_TOP-OPTIC_WHITE-1.jpg']
+        pictures = ['https://kickz.akamaized.net/en/media/images/p/1200/guess-HERO_SEASONAL_WOMAN_CROP_TOP-OPTIC_WHITE-1.jpg',
+        'https://cdn.shopify.com/s/files/1/2638/7858/products/3c_2cabc37f-01a1-4d81-89ed-7431d1bf5842.jpg?v=1578598602']
     } else if (this.props.clothes === 'bottoms') {
         pictures = ['https://i.pinimg.com/originals/3c/4e/00/3c4e00ae90a76c51162f95af7994be84.jpg']
     } else if (this.props.clothes === 'shoes') {

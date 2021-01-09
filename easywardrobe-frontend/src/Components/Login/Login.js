@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, withStyles, Box, Card, CardContent, Typography, CardActions } from '@material-ui/core';
+import tachyons from 'tachyons';
 
 class Login extends React.Component {
     constructor(props) {
@@ -19,28 +20,28 @@ class Login extends React.Component {
     }
 
     onSubmitLogin = () => {
-        fetch('http://localhost:5200/login', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                username: this.state.loginEmail,
-                password: this.state.loginPassword
-            })
-        }).then(response => {
-            response.json()
-        })
-        .then(data => {
-            if (data === 'Error - Username not found') {
-                alert("Error - Username not found");
-            } else if (data === 'Error - Invalid Password') {
-                alert('Error - Invalid Password');
-            } else {
-                console.log("Successful login")
+        // fetch('http://localhost:5200/login', {
+        //     method: 'post',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify({
+        //         username: this.state.loginEmail,
+        //         password: this.state.loginPassword
+        //     })
+        // }).then(response => {
+        //     response.json()
+        // })
+        // .then(data => {
+        //     if (data === 'Error - Username not found') {
+        //         alert("Error - Username not found");
+        //     } else if (data === 'Error - Invalid Password') {
+        //         alert('Error - Invalid Password');
+        //     } else {
+        //         console.log("Successful login")
                 this.props.onAuthenticateHandler()
-            }
-        })
-        .catch((err) => console.log(err))
-    }
+    //         }
+    //     })
+    //     .catch((err) => console.log(err))
+     }
 
     render() {
         return (
