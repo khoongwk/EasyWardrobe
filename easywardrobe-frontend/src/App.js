@@ -12,7 +12,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      isAuthenticated: true
+      isAuthenticated: false
     }
     this.onAuthenticateHandler = this.onAuthenticateHandler.bind(this)
     this.onLogoutHandler = this.onLogoutHandler.bind(this)
