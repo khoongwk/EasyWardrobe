@@ -66,21 +66,22 @@ class Home extends React.Component{
     }
 
     onOutfitSave = () => {
-        fetch('/addOutfit', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                aImage: this.state.aImage,
-                tImage: this.state.tImage,
-                bImage: this.state.bImage,
-                sImage: this.state.sImage
-            })
-        }).then(res => res.json())
-        .then(data => {
-            if (data === "Outfit inserted successfully into outfits table") {
-                this.setState({ aImage: '', bImage: '', tImage:'', sImage:''})
-            }
-        })
+        // fetch('/addOutfit', {
+        //     method: 'post',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify({
+        //         aImage: this.state.aImage,
+        //         tImage: this.state.tImage,
+        //         bImage: this.state.bImage,
+        //         sImage: this.state.sImage
+        //     })
+        // }).then(res => res.json())
+        // .then(data => {
+        //     if (data === "Outfit inserted successfully into outfits table") {
+        //         this.setState({ aImage: '', bImage: '', tImage:'', sImage:''})
+        //     }
+        // })
+        
     }
 
     render() {

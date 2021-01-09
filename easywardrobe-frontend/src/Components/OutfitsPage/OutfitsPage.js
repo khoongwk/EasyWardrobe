@@ -29,20 +29,20 @@ class OutfitsPage extends Component {
     }
   }
 
-  componentDidMount() {
-    fetch('/getOutfits').then(res => res.json()).then(data => this.setState({outfitsJSON: data}))
-  }
+  // componentDidMount() {
+  //   fetch('/getOutfits').then(res => res.json()).then(data => this.setState({outfitsJSON: data}))
+  // }
 
-  get savedOutfits() {
-    console.log(this.state.outfitsJSON);
-    if (this.state.outfitsJSON.length === 0) {
-      console.log("returning undefined.");
-      return undefined;
-    } else {
-      console.log("Returning entire JSON")
-      return this.state.outfitsJSON
-    }
-  }
+  // get savedOutfits() {
+  //   console.log(this.state.outfitsJSON);
+  //   if (this.state.outfitsJSON.length === 0) {
+  //     console.log("returning undefined.");
+  //     return undefined;
+  //   } else {
+  //     console.log("Returning entire JSON")
+  //     return this.state.outfitsJSON
+  //   }
+  // }
 
   render() {
     return (
@@ -56,11 +56,11 @@ class OutfitsPage extends Component {
         <Grid className={this.props.classes.container}
            id="introduction" justify="center" container>
           <Grid xs={10} lg={8} spacing={2} justify="center" container>
-            {
+            {/* {
               this.savedOutfits
                 ? this.savedOutfits["outfits"].map(file => <Outfit outfit={file["items"]} id={file["outfit_id"]}/>)                
                 : null
-            }
+            } */}
           </Grid>
         </Grid>
       </Box>
