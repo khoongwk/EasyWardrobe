@@ -5,7 +5,7 @@ const Outfit = ({ outfit, onDelete, id }) => {
 
     outfit.map(clothing => {
         return (
-        fetch(`http://localhost:5200/getOutfitWithPath/${clothing}`)
+        fetch(`http://localhost:5200/getOutfits/${clothing}`)
             .then(res => res.json())
         );
     });

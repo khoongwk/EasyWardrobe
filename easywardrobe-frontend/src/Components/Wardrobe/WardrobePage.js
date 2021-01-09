@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import ClothesCategory from './ClothesCategory'
 import ClothesCard from './ClothesCard'
 import { Button, Input, Grid, withStyles, Box, Card, CardContent, Typography, CardActions, CardActionArea, CardMedia  } from '@material-ui/core';
-import axios from 'axios'
+// import axios from 'axios'
 
 const styles = {
   container: {
@@ -72,26 +72,26 @@ class WardrobePage extends Component {
   }
 
   onDeleteHandler(imgsrc) {
-    const target_url = 'http://localhost:5200/deleteItem/'
-    axios.post(target_url, {"image_type": this.state.chosenCategory, "relative_path": imgsrc})
-    .then(res => console.log(res))
-    .catch(error => console.log(error))
+    // const target_url = 'http://localhost:5200/deleteItem/'
+    // axios.post(target_url, {"image_type": this.state.chosenCategory, "relative_path": imgsrc})
+    // .then(res => console.log(res))
+    // .catch(error => console.log(error))
   }
 
   // TODO POST to backend.
   fileUploadHandler = () => {
-    const image = new FormData();
-    image.append('image', this.state.selectedFile);
-    const target_url = 'http://localhost:5200/uploadItem/' + this.state.chosenCategory
-    axios.post(target_url, image, {
-      headers: {
-        'accept': '*/*',
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    .then(res => console.log(res))
-    .catch(error => console.log(error.response))
-    alert('Submitted file!')
+    // const image = new FormData();
+    // image.append('image', this.state.selectedFile);
+    // const target_url = 'http://localhost:5200/uploadItem/' + this.state.chosenCategory
+    // axios.post(target_url, image, {
+    //   headers: {
+    //     'accept': '*/*',
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // })
+    // .then(res => console.log(res))
+    // .catch(error => console.log(error.response))
+    // alert('Submitted file!')
   }
 
   render() {

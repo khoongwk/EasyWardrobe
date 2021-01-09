@@ -66,7 +66,7 @@ class Home extends React.Component{
     }
 
     onOutfitSave = () => {
-        fetch('http://localhost:5200/addOutfit', {
+        fetch('/addOutfit', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -77,7 +77,7 @@ class Home extends React.Component{
             })
         }).then(res => res.json())
         .then(data => {
-            if (data === 'success') {
+            if (data === "Outfit inserted successfully into outfits table") {
                 this.setState({ aImage: '', bImage: '', tImage:'', sImage:''})
             }
         })

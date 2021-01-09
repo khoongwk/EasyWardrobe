@@ -4,7 +4,7 @@ import Outfit from './Outfit';
 class OutfitsList extends React.Component {
 
     onDelete = (id) => {
-        console.log(id);
+        fetch(`/deleteOutfit/${id}`);
     }
     render () {
     //     const outfits = [{
@@ -27,7 +27,7 @@ class OutfitsList extends React.Component {
     //     }
     // ];
     let outfits = [];
-        fetch('https://localhost:5200/getOutfit')
+        fetch('/getOutfits')
         .then(res => res.json())
         .then(data => outfits.append(data));
 
