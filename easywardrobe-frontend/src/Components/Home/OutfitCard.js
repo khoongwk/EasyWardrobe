@@ -14,7 +14,7 @@ class OutfitCard extends React.Component {
         } else {
             return (
                 <div>
-                    <img width='200px' height='auto' alt='clothes' src={this.props.image} />
+                    <img width='200px' height='170px' alt='clothes' src={this.props.image} />
                 </div>
             );
         }
